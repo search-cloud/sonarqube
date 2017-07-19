@@ -1,0 +1,31 @@
+.navbar-context-favorite {
+  float: left;
+  padding: 7px 10px 0 0;
+}
+
+.navbar-context-meta {
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 30px;
+  padding: 0 10px;
+  color: #777;
+  font-size: 12px;
+  text-align: right;
+}
+
+.navbar-context-description {
+  float: left;
+  line-height: 24px;
+  padding-top: 4px;
+  padding-left: 4px;
+  color: #777;
+  font-size: 12px;
+}
+
+.navbar-context-title-qualifier {
+  display: inline-block;
+  line-height: 16px;
+  padding-top: 5px;
+  box-sizing: border-box;
+}
