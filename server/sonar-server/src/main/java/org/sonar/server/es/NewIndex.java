@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.common.settings.Settings;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.utils.DateUtils;
 import org.sonar.process.ProcessProperties;
 import org.sonar.server.permission.index.AuthorizationTypeSupport;
 
@@ -164,7 +165,7 @@ public class NewIndex {
     }
 
     public NewIndexType createDateTimeField(String fieldName) {
-      return setProperty(fieldName, ImmutableMap.of("type", "date", "format", "date_time"));
+      return setProperty(fieldName, ImmutableMap.of("type", "date", "format", "epoch_second"));
     }
 
     public NewIndexType createDoubleField(String fieldName) {

@@ -32,12 +32,8 @@ import org.sonar.api.utils.DateUtils;
 import org.sonar.core.util.stream.MoreCollectors;
 import org.sonar.db.DbClient;
 import org.sonar.db.DbSession;
-import org.sonar.server.es.BulkIndexer;
+import org.sonar.server.es.*;
 import org.sonar.server.es.BulkIndexer.Size;
-import org.sonar.server.es.EsClient;
-import org.sonar.server.es.IndexType;
-import org.sonar.server.es.ProjectIndexer;
-import org.sonar.server.es.StartupIndexer;
 import org.sonar.server.permission.index.PermissionIndexerDao.Dto;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -162,7 +158,7 @@ public class PermissionIndexer implements ProjectIndexer, StartupIndexer {
 
   private static IndexRequest newIndexRequest(PermissionIndexerDao.Dto dto, IndexType indexType) {
     Map<String, Object> doc = new HashMap<>();
-    doc.put(AuthorizationTypeSupport.FIELD_UPDATED_AT, DateUtils.longToDate(dto.getUpdatedAt()));
+    doc.put(AuthorizationTypeSupport.FIELD_UPDATED_AT, BaseDoc.epochMillisToEpochSeconds(dto.getUpdatedAt()));
     if (dto.isAllowAnyone()) {
       doc.put(AuthorizationTypeSupport.FIELD_ALLOW_ANYONE, true);
       // no need to feed users and groups

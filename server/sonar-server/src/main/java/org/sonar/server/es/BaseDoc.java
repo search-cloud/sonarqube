@@ -20,6 +20,7 @@
 package org.sonar.server.es;
 
 import com.google.common.base.Preconditions;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +68,9 @@ public abstract class BaseDoc {
       if (val instanceof Date) {
         return (Date)val;
       }
+      if (val instanceof Number) {
+        return epochSecondsToDate((Number) val);
+      }
       return EsUtils.parseDateTime((String) val);
     }
     return null;
@@ -91,10 +95,14 @@ public abstract class BaseDoc {
 
   public Date getFieldAsDate(String key) {
     Object value = getField(key);
-    if (value instanceof Date) {
-      return (Date)value;
+    if (value instanceof Number) {
+      return epochSecondsToDate((Number) value);
     }
     return EsUtils.parseDateTime((String)value);
+  }
+
+  public void setField(String key, @Nullable Date value) {
+    fields.put(key, dateToEpochSeconds(value));
   }
 
   public void setField(String key, @Nullable Object value) {
@@ -106,4 +114,23 @@ public abstract class BaseDoc {
     return fields;
   }
 
+  @CheckForNull
+  public static Date epochSecondsToDate(@Nullable Number value) {
+    if (value == null) {
+      return null;
+    }
+    return new Date(value.longValue() * 1000L);
+  }
+
+  @CheckForNull
+  public static Long dateToEpochSeconds(@Nullable Date value) {
+    if (value == null) {
+      return null;
+    }
+    return epochMillisToEpochSeconds(value.getTime());
+  }
+
+  public static long epochMillisToEpochSeconds(long time) {
+    return time / 1000L;
+  }
 }

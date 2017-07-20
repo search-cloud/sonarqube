@@ -65,12 +65,7 @@ import org.sonar.api.utils.System2;
 import org.sonar.core.util.stream.MoreCollectors;
 import org.sonar.db.component.ComponentDto;
 import org.sonar.db.organization.OrganizationDto;
-import org.sonar.server.es.EsClient;
-import org.sonar.server.es.EsUtils;
-import org.sonar.server.es.SearchOptions;
-import org.sonar.server.es.SearchResult;
-import org.sonar.server.es.Sorting;
-import org.sonar.server.es.StickyFacetBuilder;
+import org.sonar.server.es.*;
 import org.sonar.server.issue.IssueQuery;
 import org.sonar.server.permission.index.AuthorizationTypeSupport;
 import org.sonar.server.user.UserSession;
@@ -341,16 +336,16 @@ public class IssueIndex {
     if (createdAfter != null) {
       filters.put("__createdAfter", QueryBuilders
         .rangeQuery(IssueIndexDefinition.FIELD_ISSUE_FUNC_CREATED_AT)
-        .gte(createdAfter));
+        .gte(BaseDoc.dateToEpochSeconds(createdAfter)));
     }
     if (createdBefore != null) {
       filters.put("__createdBefore", QueryBuilders
         .rangeQuery(IssueIndexDefinition.FIELD_ISSUE_FUNC_CREATED_AT)
-        .lt(createdBefore));
+        .lt(BaseDoc.dateToEpochSeconds(createdBefore)));
     }
     Date createdAt = query.createdAt();
     if (createdAt != null) {
-      filters.put("__createdAt", termQuery(IssueIndexDefinition.FIELD_ISSUE_FUNC_CREATED_AT, createdAt));
+      filters.put("__createdAt", termQuery(IssueIndexDefinition.FIELD_ISSUE_FUNC_CREATED_AT, BaseDoc.dateToEpochSeconds(createdAt)));
     }
   }
 
