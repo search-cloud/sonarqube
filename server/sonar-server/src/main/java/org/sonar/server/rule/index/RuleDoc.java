@@ -186,7 +186,7 @@ public class RuleDoc extends BaseDoc {
   }
 
   public RuleDoc setCreatedAt(@Nullable Long l) {
-    setField(RuleIndexDefinition.FIELD_RULE_CREATED_AT, l);
+    setField(RuleIndexDefinition.FIELD_RULE_CREATED_AT, epochMillisToEpochSeconds(l));
     return this;
   }
 
@@ -195,7 +195,7 @@ public class RuleDoc extends BaseDoc {
   }
 
   public RuleDoc setUpdatedAt(@Nullable Long l) {
-    setField(RuleIndexDefinition.FIELD_RULE_UPDATED_AT, l);
+    setField(RuleIndexDefinition.FIELD_RULE_UPDATED_AT, epochMillisToEpochSeconds(l));
     return this;
   }
 
