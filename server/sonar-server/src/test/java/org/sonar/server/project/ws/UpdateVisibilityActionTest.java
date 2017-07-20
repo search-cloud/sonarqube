@@ -66,6 +66,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.sonar.db.component.ComponentTesting.newProjectCopy;
 import static org.sonar.db.organization.OrganizationTesting.newOrganizationDto;
 
 public class UpdateVisibilityActionTest {
@@ -182,7 +183,7 @@ public class UpdateVisibilityActionTest {
     dbTester.components().insertComponents(module, dir, file);
     ComponentDto view = dbTester.components().insertView(organization);
     ComponentDto subView = ComponentTesting.newSubView(view);
-    ComponentDto projectCopy = ComponentTesting.newProjectCopy("foo", project, subView);
+    ComponentDto projectCopy = newProjectCopy("foo", project, subView);
     dbTester.components().insertComponents(subView, projectCopy);
 
     Stream.of(module, dir, file, subView, projectCopy)
@@ -299,7 +300,7 @@ public class UpdateVisibilityActionTest {
     ComponentDto project = randomPublicOrPrivateProject();
     ComponentDto view = dbTester.components().insertView(organization);
     ComponentDto subView = ComponentTesting.newSubView(view);
-    ComponentDto projectCopy = ComponentTesting.newProjectCopy("foo", project, subView);
+    ComponentDto projectCopy = newProjectCopy("foo", project, subView);
     dbTester.components().insertComponents(subView, projectCopy);
     userSessionRule.addProjectPermission(UserRole.ADMIN, view);
 
@@ -318,10 +319,27 @@ public class UpdateVisibilityActionTest {
     ComponentDto project = randomPublicOrPrivateProject();
     ComponentDto view = dbTester.components().insertView(organization);
     ComponentDto subView = ComponentTesting.newSubView(view);
-    ComponentDto projectCopy = ComponentTesting.newProjectCopy("foo", project, subView);
+    ComponentDto projectCopy = newProjectCopy("foo", project, subView);
     dbTester.components().insertComponents(subView, projectCopy);
     userSessionRule.addProjectPermission(UserRole.ADMIN, view);
     TestRequest request = this.request.setParam(PARAM_PROJECT, view.key())
+      .setParam(PARAM_VISIBILITY, PRIVATE);
+
+    expectedException.expect(BadRequestException.class);
+    expectedException.expectMessage("Views can't be made private");
+
+    request.execute();
+  }
+
+  @Test
+  public void execute_fails_with_BadRequestException_when_changing_an_application_to_private() {
+    OrganizationDto organization = dbTester.organizations().insert();
+    ComponentDto project = randomPublicOrPrivateProject();
+    ComponentDto application = dbTester.components().insertApplication(organization);
+    ComponentDto projectCopy = newProjectCopy("foo", project, application);
+    dbTester.components().insertComponents(projectCopy);
+    userSessionRule.addProjectPermission(UserRole.ADMIN, application);
+    TestRequest request = this.request.setParam(PARAM_PROJECT, application.key())
       .setParam(PARAM_VISIBILITY, PRIVATE);
 
     expectedException.expect(BadRequestException.class);
