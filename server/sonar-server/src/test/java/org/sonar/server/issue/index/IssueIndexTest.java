@@ -490,7 +490,6 @@ public class IssueIndexTest {
     assertThat(underTest.search(IssueQuery.builder().resolved(null).build(), new SearchOptions()).getDocs()).hasSize(3);
   }
 
-  @Ignore
   @Test
   public void filter_by_rules() {
     ComponentDto project = ComponentTesting.newPrivateProjectDto(newOrganizationDto());
@@ -623,7 +622,6 @@ public class IssueIndexTest {
     assertThat(result.getFacets().get("authors")).containsOnly(entry("steph", 1L), entry("simon", 2L));
   }
 
-  @Ignore
   @Test
   public void filter_by_created_after() {
     ComponentDto project = ComponentTesting.newPrivateProjectDto(newOrganizationDto());
@@ -640,7 +638,6 @@ public class IssueIndexTest {
     assertThat(underTest.search(IssueQuery.builder().createdAfter(parseDate("2014-09-25")).build(), new SearchOptions()).getDocs()).isEmpty();
   }
 
-  @Ignore
   @Test
   public void filter_by_created_before() {
     ComponentDto project = ComponentTesting.newPrivateProjectDto(newOrganizationDto());
@@ -657,7 +654,6 @@ public class IssueIndexTest {
     assertThat(underTest.search(IssueQuery.builder().createdBefore(parseDate("2014-09-25")).build(), new SearchOptions()).getDocs()).hasSize(2);
   }
 
-  @Ignore
   @Test
   public void filter_by_created_after_and_before() {
     ComponentDto project = ComponentTesting.newPrivateProjectDto(newOrganizationDto());
@@ -704,7 +700,6 @@ public class IssueIndexTest {
       .build(), new SearchOptions()).getDocs();
   }
 
-  @Ignore
   @Test
   public void filter_by_create_after_and_before_take_into_account_timezone() {
     ComponentDto project = ComponentTesting.newPrivateProjectDto(newOrganizationDto());
@@ -752,7 +747,6 @@ public class IssueIndexTest {
     }
   }
 
-  @Ignore
   @Test
   public void filter_by_created_at() {
     ComponentDto project = ComponentTesting.newPrivateProjectDto(newOrganizationDto());
@@ -764,7 +758,6 @@ public class IssueIndexTest {
     assertThat(underTest.search(IssueQuery.builder().createdAt(parseDate("2014-09-21")).build(), new SearchOptions()).getDocs()).isEmpty();
   }
 
-  @Ignore
   @Test
   public void facet_on_created_at_with_less_than_20_days() {
 
@@ -788,7 +781,6 @@ public class IssueIndexTest {
       entry("2014-09-07T01:00:00+0000", 0L));
   }
 
-  @Ignore
   @Test
   public void facet_on_created_at_with_less_than_20_weeks() {
 
@@ -805,7 +797,6 @@ public class IssueIndexTest {
       entry("2014-09-15T01:00:00+0000", 1L));
   }
 
-  @Ignore
   @Test
   public void facet_on_created_at_with_less_than_20_months() {
 
@@ -824,7 +815,6 @@ public class IssueIndexTest {
       entry("2015-01-01T01:00:00+0000", 1L));
   }
 
-  @Ignore
   @Test
   public void facet_on_created_at_with_more_than_20_months() {
     SearchOptions SearchOptions = fixtureForCreatedAtFacet();
@@ -843,7 +833,6 @@ public class IssueIndexTest {
 
   }
 
-  @Ignore
   @Test
   public void facet_on_created_at_with_one_day() {
     SearchOptions SearchOptions = fixtureForCreatedAtFacet();
@@ -856,7 +845,6 @@ public class IssueIndexTest {
       entry("2014-09-01T01:00:00+0000", 2L));
   }
 
-  @Ignore
   @Test
   public void facet_on_created_at_with_bounds_outside_of_data() {
     SearchOptions options = fixtureForCreatedAtFacet();
@@ -876,7 +864,6 @@ public class IssueIndexTest {
       entry("2015-01-01T01:00:00+0000", 1L));
   }
 
-  @Ignore
   @Test
   public void facet_on_created_at_without_start_bound() {
     SearchOptions SearchOptions = fixtureForCreatedAtFacet();
